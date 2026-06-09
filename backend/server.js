@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import { connectToDb } from './config/db.js';
 import { authRouter } from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
+import { jobRouter } from './routes/jobRoutes.js';
 
 dotenv.config();
 
@@ -14,9 +15,7 @@ app.use(cookieParser())
 
 app.use('/api/auth', authRouter);
 
-app.get('/',(req,res) => {
-    res.send("Hello world ")
-})
+app.use('/api', jobRouter)
 
 connectToDb();
 
