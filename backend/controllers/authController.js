@@ -1,36 +1,36 @@
-import User from "../models/User";
+import User from "../models/User.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 const createToken = (userID) => {
     return jwt.sign(
-        {id: userID},
-        process.env.JWT_SECRET,{
-            expiresIn : "7d"
-        }
+        { id: userID },
+        process.env.JWT_SECRET, {
+        expiresIn: "7d"
+    }
     );
 };
 
-export const signUp = async (req,res) => {
+export const Register = async (req, res) => {
 
     try {
 
-        const { name, email, password} = req.body;
+        const { name, email, password } = req.body;
 
-        if(!name || !email || !password){
+        if (!name || !email || !password) {
             return res.status(400).json({
                 message: "All fields required"
             })
         }
 
-        const userExist = await User.findOne( { email });
-        if(userExist){
+        const userExist = await User.findOne({ email });
+        if (userExist) {
             return res.status(400).json({
                 message: "User already exists"
             })
         }
 
-        const hashedPassword = await bcrypt.hash( password ,10)
+        const hashedPassword = await bcrypt.hash(password, 10)
 
         const newUser = await User.create({
             name,
@@ -41,16 +41,16 @@ export const signUp = async (req,res) => {
 
         const token = createToken(newUser._id)
 
-        res.cookie("token",token,{
-            httpOnly : true,
-            secure: false,
-            sameSite : 'strict',
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
         return res.status(201).json({
             id: newUser._id,
-            name : newUser.name,
+            name: newUser.name,
             email: newUser.email,
             role: newUser.role
         })
@@ -61,5 +61,79 @@ export const signUp = async (req,res) => {
             message: "Server error",
             error: error.message
         })
+    }
+}
+
+export const Login = async (req, res) => {
+
+    try {
+        const { email, password } = req.body;
+
+        if(!email || !password){
+            return res.status(400).json({
+                message: "Both fields are required"
+            })
+        }
+
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+        return res.status(400).json({
+            message: "Unauthorized"
+        })
+    }
+
+    let isMatch = await bcrypt.compare(password, user.password)
+
+    if (!isMatch) {
+        return res.status(400).json({
+            message: "wrong email or password"
+        })
+    }
+
+    let token = createToken(user._id);
+
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+
+    })
+
+    return res.status(200).json({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Server error"
+        })
+    }
+
+}
+
+export const getMe = async (req,res) => {
+    
+    try {
+    if(!req.user){
+        return res.status(404).json({
+            message: "User not found"
+        })
+    }
+
+    return res.status(200).json({
+        id: req.user.id,
+        name: req.user.name,
+        email: req.user.email,
+        role: req.user.role 
+    })
+    } catch (error) {
+      return res.status(500).json({
+        message: "Server error"
+      })  
     }
 }
