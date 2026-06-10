@@ -69,3 +69,47 @@ export const getJobById = async (req, res) => {
     }
 }
 
+export const updateJob = async (req,res) => {
+
+    try {
+        
+    const id = req.params.id;
+
+    const { title, company, location, salary, description, requirements, jobType } = req.body;
+
+    if (!title || !company || !location || !salary || !description || !requirements || !jobType) {
+        return res.status(400).json({
+            message: "All fields are mandatory"
+        })
+    }
+
+    const updatedJob = {
+        title: req.body.title,
+        company: req.body.company,
+        location: req.body.location,
+        salary: req.body.salary,
+        description: req.body.description,
+        requirements: req.body.requirements,
+        jobType: req.body.jobType,
+        status: req.body.status
+    };
+
+    const job = await Job.findByIdAndUpdate(id, updatedJob, {
+        new : true
+    })
+
+    if(!job){
+        return res.status(404).json({
+            message: "job not found"
+        })
+    }
+
+    return res.status(200).json({
+        job
+    })
+
+    } catch (error) {
+        showError(res)
+    }
+}
+
