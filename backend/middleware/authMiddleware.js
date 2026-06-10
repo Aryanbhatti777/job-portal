@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
+import showError from './errorMiddleware.js'
 
 export const checkIsLoggedIn = async (req,res,next) => {
 
@@ -22,8 +23,6 @@ export const checkIsLoggedIn = async (req,res,next) => {
     next();
 
     } catch (error) {
-        return res.status(400).json({
-            message: "Server error"
-        })
+        return showError(res)
     }
 }

@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import showError from "../middleware/errorMiddleware.js";
 
 const createToken = (userID) => {
     return jwt.sign(
@@ -57,10 +58,7 @@ export const Register = async (req, res) => {
 
 
     } catch (error) {
-        res.status(500).json({
-            message: "Server error",
-            error: error.message
-        })
+        return showError(res)
     }
 }
 
@@ -109,9 +107,7 @@ export const Login = async (req, res) => {
     })
 
     } catch (error) {
-        return res.status(500).json({
-            message: "Server error"
-        })
+        return showError(res)
     }
 
 }
@@ -132,8 +128,6 @@ export const getMe = async (req,res) => {
         role: req.user.role 
     })
     } catch (error) {
-      return res.status(500).json({
-        message: "Server error"
-      })  
+      return showError(res)  
     }
 }
