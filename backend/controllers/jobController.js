@@ -33,3 +33,20 @@ export const AddJob = async (req,res) => {
         })
     }
 }
+
+export const getJobs = async (req,res) => {
+
+    try {
+        
+        const jobs = await Job.find().sort({ createdAt: -1 });
+
+         return res.status(200).json({
+            jobs
+         })
+
+    } catch (error) {
+        return res.status(500).json({
+            message : "server error"
+        })
+    }
+}
