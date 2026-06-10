@@ -29,6 +29,25 @@ const userSchema = new mongoose.Schema(
             type: String,
             enum: ["admin", "seeker"],
             default: "seeker"
+        },
+
+        resume: {
+            url: {
+                type: String,
+                default: ""
+            },
+            public_id: {
+                type: String,
+                default: ""
+            },
+            originalName: {
+                type: String,
+                default: ""
+            },
+            uploadedAt: {
+                type: Date,
+                default: null
+            }
         }
     },
     {

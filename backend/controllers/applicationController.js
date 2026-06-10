@@ -3,13 +3,12 @@ import Job from "../models/Job.js";
 
 
 
-export const applyJob = async (req, res) => { 
+export const applyJob = async (req, res) => {
     try {
 
         const userId = req.user.id;
         const jobId = req.params.jobId;
-        const resume = req.body.resume
-        
+
 
         // 1. check job exists
         const job = await Job.findById(jobId);
@@ -33,9 +32,9 @@ export const applyJob = async (req, res) => {
         }
 
         // 3. check resume exists
-        if (!resume) {
+        if (!req.user.resume?.url) {
             return res.status(400).json({
-                message: "Resume required to apply"
+                message: "Please upload resume before applying"
             });
         }
 
@@ -43,18 +42,18 @@ export const applyJob = async (req, res) => {
         await Application.create({
             user: userId,
             job: jobId,
-            resume: req.body.resume,
+            resumeSnapshot: req.user.resume.url, // ✅ correct
             status: "pending"
         });
 
         return res.status(201).json({
             message: "Applied successfully"
         });
-        
 
-    }catch(error){
+
+    } catch (error) {
         return res.status(500).json({
-        message: error.message,
-      })
+            message: error.message,
+        })
     }
 }

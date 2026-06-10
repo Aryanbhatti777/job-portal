@@ -14,7 +14,7 @@ const applicationSchema = new mongoose.Schema({
         required: true
     },
 
-    resume: {
+    resumeSnapshot: {
         type: String,
         required: true
     },

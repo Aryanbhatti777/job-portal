@@ -1,14 +1,16 @@
 import express from 'express';
 import dotenv from 'dotenv'
+dotenv.config();
 import { connectToDb } from './config/db.js';
 import { authRouter } from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
 import { jobRouter } from './routes/jobRoutes.js';
 import { ApplicationRouter } from './routes/applicationRoutes.js';
 import { profileRouter } from './routes/profileRoutes.js';
+import { connectCloudinary } from './config/cloudinary.js';
 
 
-dotenv.config();
+
 
 const app = express();
 
@@ -25,5 +27,7 @@ app.use('/api/application/', ApplicationRouter)
 app.use('/api/profile',profileRouter)
 
 connectToDb();
+
+connectCloudinary();
 
 app.listen(5000, () => console.log("Server is running on port 5000"));
