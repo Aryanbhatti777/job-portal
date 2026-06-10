@@ -1,28 +1,34 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
-import showError from './errorMiddleware.js'
 
-export const checkIsLoggedIn = async (req,res,next) => {
 
+export const checkIsLoggedIn = async (req, res, next) => {
     try {
-        const token = req.cookies.token
-    if(!token){
-        return res.status(401).json({
-            message: "Unauthorized"
-        })
-    }
+        const token = req.cookies.token;
 
-    const decoded = jwt.verify(
-        token,
-        process.env.JWT_SECRET
-    )
+        if (!token) {
+            return res.status(401).json({
+                message: "Unauthorized"
+            });
+        }
 
-    const person = await User.findById(decoded.id)
-    req.user = person
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    next();
+        const person = await User.findById(decoded.id);
+
+        if (!person) {
+            return res.status(401).json({
+                message: "User not found"
+            });
+        }
+
+        req.user = person;
+
+        next();
 
     } catch (error) {
-        return showError(res)
+        return res.status(500).json({
+        message: error.message,
+      })
     }
-}
+};

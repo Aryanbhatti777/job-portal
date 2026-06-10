@@ -1,5 +1,5 @@
 import Job from "../models/Job.js";
-import showError from "../middleware/errorMiddleware.js";
+import Application from "../models/Application.js";
 
 
 export const AddJob = async (req, res) => {
@@ -29,7 +29,9 @@ export const AddJob = async (req, res) => {
             newJob
         })
     } catch (error) {
-        return showError(res);
+        return res.status(500).json({
+        message: error.message,
+      })
     }
 }
 
@@ -44,7 +46,9 @@ export const getJobs = async (req, res) => {
         })
 
     } catch (error) {
-        return showError(res);
+        return res.status(500).json({
+        message: error.message,
+      })
     }
 }
 
@@ -65,7 +69,9 @@ export const getJobById = async (req, res) => {
             job
         })
     } catch (error) {
-        return showError(res);
+        return res.status(500).json({
+        message: error.message,
+      })
     }
 }
 
@@ -109,7 +115,9 @@ export const updateJob = async (req,res) => {
     })
 
     } catch (error) {
-        showError(res)
+        return res.status(500).json({
+        message: error.message,
+      })
     }
 }
 
@@ -133,7 +141,9 @@ export const deleteJob = async (req,res) => {
 
    } catch (error) {
     
-    return showError(res)
+    return res.status(500).json({
+        message: error.message,
+      })
    }
 }
 

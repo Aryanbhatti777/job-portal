@@ -4,6 +4,9 @@ import { connectToDb } from './config/db.js';
 import { authRouter } from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
 import { jobRouter } from './routes/jobRoutes.js';
+import { ApplicationRouter } from './routes/applicationRoutes.js';
+import { profileRouter } from './routes/profileRoutes.js';
+
 
 dotenv.config();
 
@@ -15,7 +18,11 @@ app.use(cookieParser())
 
 app.use('/api/auth', authRouter);
 
-app.use('/api', jobRouter)
+app.use('/api/jobs', jobRouter);
+
+app.use('/api/application/', ApplicationRouter)
+
+app.use('/api/profile',profileRouter)
 
 connectToDb();
 
