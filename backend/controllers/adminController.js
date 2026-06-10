@@ -90,3 +90,37 @@ export const getMyJobs = async (req, res) => {
         });
     }
 };
+
+export const getDashboardStats = async (req, res) => {
+    try {
+
+        const totalJobs = await Job.countDocuments();
+
+        const totalApplications = await Application.countDocuments();
+
+        const pendingApplications = await Application.countDocuments({
+            status: "pending"
+        });
+
+        const approvedApplications = await Application.countDocuments({
+            status: "approved"
+        });
+
+        const rejectedApplications = await Application.countDocuments({
+            status: "rejected"
+        });
+
+        return res.status(200).json({
+            totalJobs,
+            totalApplications,
+            pendingApplications,
+            approvedApplications,
+            rejectedApplications
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
