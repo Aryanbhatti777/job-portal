@@ -8,6 +8,7 @@ import { jobRouter } from './routes/jobRoutes.js';
 import { ApplicationRouter } from './routes/applicationRoutes.js';
 import { profileRouter } from './routes/profileRoutes.js';
 import { connectCloudinary } from './config/cloudinary.js';
+import { adminRouter } from './routes/adminRoutes.js';
 
 
 
@@ -25,6 +26,8 @@ app.use('/api/jobs', jobRouter);
 app.use('/api/application/', ApplicationRouter)
 
 app.use('/api/profile',profileRouter)
+
+app.use('/api/admin', adminRouter)
 
 connectToDb();
 
