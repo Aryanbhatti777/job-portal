@@ -124,3 +124,19 @@ export const getDashboardStats = async (req, res) => {
         });
     }
 };
+
+export const getAllApplications = async (req, res) => {
+    try {
+        const applications = await Application.find({})
+            .populate("job", "title location salary")
+            .populate("user", "name email");
+
+        return res.status(200).json({
+            applications
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};

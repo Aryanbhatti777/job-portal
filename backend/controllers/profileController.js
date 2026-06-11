@@ -16,10 +16,13 @@ export const getMe = async (req, res) => {
         }
 
         return res.status(200).json({
-            id: req.user.id,
-            name: req.user.name,
-            email: req.user.email,
-            role: req.user.role
+            user: {
+                id: req.user.id,
+                name: req.user.name,
+                email: req.user.email,
+                role: req.user.role,
+                resume: req.user.resume || null
+            }
         })
     } catch (error) {
         return res.status(500).json({
@@ -46,14 +49,19 @@ export const uploadResume = async (req, res) => {
             resource_type: "raw"
         });
 
-        console.log("Before delete:", req.file.path);
+        if (user.resume?.public_id) {
+            await cloudinary.uploader.destroy(user.resume.public_id, {
+                resource_type: "raw"
+            });
+        }
 
         fs.unlinkSync(req.file.path);
-console.log("File deleted");
 
         user.resume = {
             url: result.secure_url,
-            public_id: result.public_id
+            public_id: result.public_id,
+            originalName: req.file.originalname,
+            uploadedAt: new Date()
         };
 
         await user.save();

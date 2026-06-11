@@ -1,0 +1,333 @@
+.page {
+  min-height: 100vh;
+  background: #f8fafc;
+  margin: 0;
+}
+
+/* ================= HERO ================= */
+
+.hero {
+  min-height: 90vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 80px;
+
+  padding: 100px 80px;
+
+  background: linear-gradient(
+    135deg,
+    #020617 0%,
+    #0f172a 30%,
+    #1e3a8a 70%,
+    #2563eb 100%
+  );
+
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+
+  width: 700px;
+  height: 700px;
+
+  border-radius: 50%;
+
+  top: -250px;
+  right: -180px;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  filter: blur(30px);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+
+  width: 350px;
+  height: 350px;
+
+  border-radius: 50%;
+
+  left: -120px;
+  bottom: -120px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  filter: blur(25px);
+}
+
+.heroCopy {
+  max-width: 650px;
+  position: relative;
+  z-index: 2;
+}
+
+.heroPill {
+  display: inline-block;
+
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  backdrop-filter: blur(12px);
+
+  font-weight: 600;
+
+  margin-bottom: 25px;
+}
+
+.heroCopy h1 {
+  font-size: 4.5rem;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  font-weight: 800;
+}
+
+.heroCopy p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ================= ACTION BUTTONS ================= */
+
+.heroActions {
+  display: flex;
+  gap: 15px;
+  margin-top: 35px;
+}
+
+.btnSignup,
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+
+  padding: 15px 28px;
+
+  border-radius: 14px;
+
+  font-weight: 700;
+
+  transition: all 0.3s ease;
+}
+
+.btnSignup {
+  background: #22c55e;
+  color: white;
+
+  box-shadow:
+    0 10px 25px rgba(34, 197, 94, 0.25);
+}
+
+.btnSignup:hover {
+  transform: translateY(-3px);
+  background: #16a34a;
+}
+
+.btnSecondary {
+  background: rgba(255, 255, 255, 0.12);
+
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  color: white;
+
+  backdrop-filter: blur(10px);
+}
+
+.btnSecondary:hover {
+  background: white;
+  color: #0f172a;
+  transform: translateY(-3px);
+}
+
+/* ================= HERO CARD ================= */
+
+.heroCard {
+  min-width: 340px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  border-radius: 28px;
+
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  z-index: 2;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.heroCard div {
+  background: rgba(255, 255, 255, 0.08);
+
+  padding: 20px;
+
+  border-radius: 18px;
+
+  transition: all 0.3s ease;
+}
+
+.heroCard div:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.heroCard p {
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 6px;
+}
+
+.heroCard strong {
+  font-size: 2rem;
+}
+
+/* ================= PAGE HEADER ================= */
+
+.pageHeader {
+  padding: 80px 60px 25px;
+}
+
+.pageHeader h2 {
+  font-size: 2.4rem;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.pageHeader p {
+  color: #64748b;
+}
+
+/* ================= SEARCH ================= */
+
+.searchBarContainer {
+  padding: 0 60px 40px;
+}
+
+.searchInput {
+  width: 100%;
+
+  padding: 20px 24px;
+
+  border-radius: 20px;
+
+  border: 1px solid #e2e8f0;
+
+  background: white;
+
+  font-size: 1rem;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.06);
+
+  transition: all 0.3s ease;
+}
+
+.searchInput:hover {
+  box-shadow:
+    0 15px 35px rgba(15, 23, 42, 0.1);
+}
+
+.searchInput:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.searchResultsInfo {
+  margin-top: 12px;
+  color: #64748b;
+}
+
+/* ================= JOB GRID ================= */
+
+.gridList {
+  padding: 0 60px 100px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(350px, 1fr));
+
+  gap: 28px;
+
+  align-items: stretch;
+}
+
+.emptyState {
+  background: white;
+
+  padding: 50px;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  box-shadow:
+    0 10px 20px rgba(15, 23, 42, 0.05);
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 992px) {
+  .hero {
+    min-height: auto;
+
+    padding: 80px 20px;
+
+    flex-direction: column;
+
+    text-align: center;
+
+    gap: 40px;
+  }
+
+  .heroCopy h1 {
+    font-size: 2.8rem;
+  }
+
+  .heroCard {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .heroActions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pageHeader,
+  .searchBarContainer,
+  .gridList {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .gridList {
+    grid-template-columns: 1fr;
+  }
+}

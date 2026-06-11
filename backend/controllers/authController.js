@@ -44,15 +44,18 @@ export const Register = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: "/",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
         return res.status(201).json({
-            id: newUser._id,
-            name: newUser.name,
-            email: newUser.email,
-            role: newUser.role
+            user: {
+                id: newUser._id,
+                name: newUser.name,
+                email: newUser.email,
+                role: newUser.role
+            }
         })
 
 
@@ -95,16 +98,19 @@ export const Login = async (req, res) => {
     res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000
 
     })
 
     return res.status(200).json({
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
+        user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        }
     })
 
     } catch (error) {
@@ -118,7 +124,12 @@ export const Login = async (req, res) => {
 export const logout = async (req, res) => {
     try {
 
-        res.clearCookie("token");
+        res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/'
+    });
 
         return res.status(200).json({
             message: "Logged out successfully"

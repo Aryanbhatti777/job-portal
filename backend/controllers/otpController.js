@@ -11,7 +11,26 @@ export const sendOtp = async (req, res) => {
     try {
 
 
-        const { name, email, password } = req.body;
+        const { name, email, password, role = "seeker", adminCode } = req.body;
+
+        if (!name || !email || !password) {
+            return res.status(400).json({
+                message: "All fields are required"
+            });
+        }
+
+        if (role === "admin") {
+            if (!process.env.ADMIN_SECRET) {
+                return res.status(500).json({
+                    message: "Admin signup is not configured"
+                });
+            }
+            if (adminCode !== process.env.ADMIN_SECRET) {
+                return res.status(401).json({
+                    message: "Invalid admin code"
+                });
+            }
+        }
 
         const userExist = await User.findOne({
             email
@@ -49,7 +68,7 @@ export const sendOtp = async (req, res) => {
                 name,
                 email,
                 password: hashedPassword,
-                role: "seeker",
+                role: role === "admin" ? "admin" : "seeker",
                 otp,
                 expiresAt: new Date(Date.now() + 5 * 60 * 1000),
                 lastSentAt: new Date()
@@ -130,14 +149,20 @@ export const verifyOtp = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            path: "/",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         // 8. response
         return res.status(201).json({
             message: "Email verified successfully, user created",
-            user
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
         });
 
     } catch (error) {
