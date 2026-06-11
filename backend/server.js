@@ -1,6 +1,6 @@
-import express from 'express';
 import dotenv from 'dotenv'
 dotenv.config();
+import express from 'express';
 import { connectToDb } from './config/db.js';
 import { authRouter } from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
@@ -9,6 +9,7 @@ import { ApplicationRouter } from './routes/applicationRoutes.js';
 import { profileRouter } from './routes/profileRoutes.js';
 import { connectCloudinary } from './config/cloudinary.js';
 import { adminRouter } from './routes/adminRoutes.js';
+import cors from "cors";
 
 
 
@@ -19,13 +20,15 @@ app.use(express.json());
 
 app.use(cookieParser())
 
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
 app.use('/api/auth', authRouter);
 
 app.use('/api/jobs', jobRouter);
 
 app.use('/api/application/', ApplicationRouter)
 
-app.use('/api/profile',profileRouter)
+app.use('/api/profile', profileRouter)
 
 app.use('/api/admin', adminRouter)
 
