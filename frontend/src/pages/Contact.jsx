@@ -45,7 +45,7 @@ const Contact = () => {
 
           <div>
             <strong>Email</strong>
-            <p>hello@satisfyingjobs.com</p>
+            <p>pawan93200@gmail.com</p>
           </div>
         </div>
 
@@ -54,12 +54,12 @@ const Contact = () => {
 
           <div>
             <strong>Phone</strong>
-            <p>+1 (555) 987-6543</p>
+            <p>+91 93060 39200</p>
           </div>
         </div>
 
         <a
-          href="mailto:hello@satisfyingjobs.com"
+          href="mailto:pawan93200@gmail.com"
           className={styles.btnPrimary}
         >
           Contact Now

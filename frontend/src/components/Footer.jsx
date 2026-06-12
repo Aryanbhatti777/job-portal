@@ -24,15 +24,15 @@ const Footer = () => {
         <div>
           <h4>Explore</h4>
           <a href="/about">About</a>
-          <a href="ccontact">Contact</a>
+          <a href="contact">Contact</a>
           <a href="/jobs">Jobs</a>
         </div>
 
         <div>
           <h4>Contact</h4>
-          <p>hello@satisfyingjobs.com</p>
-          <p>+1 (555) 987-6543</p>
-          <p>123 Career Ave, Suite 400</p>
+          <p>pawan93200@gmail.com</p>
+          <p>+91 93060 39200</p>
+          <p>Shop no. 158, Mahalaxmi Market, Dabra chowk, Hisar</p>
         </div>
 
       </div>

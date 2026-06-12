@@ -27,7 +27,7 @@ const Hero = () => {
   if (loading) return <Loader />;
 
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} id="hero">
       <motion.div
         className={styles.heroCopy}
         initial={{ opacity: 0, x: -80 }}

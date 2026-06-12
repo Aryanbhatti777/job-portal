@@ -1,39 +1,66 @@
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 dotenv.config();
-import express from 'express';
-import { connectToDb } from './config/db.js';
-import { authRouter } from './routes/authRoutes.js';
-import cookieParser from 'cookie-parser';
-import { jobRouter } from './routes/jobRoutes.js';
-import { ApplicationRouter } from './routes/applicationRoutes.js';
-import { profileRouter } from './routes/profileRoutes.js';
-import { connectCloudinary } from './config/cloudinary.js';
-import { adminRouter } from './routes/adminRoutes.js';
+
+import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 
+import { connectToDb } from "./config/db.js";
+import { connectCloudinary } from "./config/cloudinary.js";
 
-
+import { authRouter } from "./routes/authRoutes.js";
+import { jobRouter } from "./routes/jobRoutes.js";
+import { ApplicationRouter } from "./routes/applicationRoutes.js";
+import { profileRouter } from "./routes/profileRoutes.js";
+import { adminRouter } from "./routes/adminRoutes.js";
 
 const app = express();
 
+// ---------------- MIDDLEWARE ----------------
 app.use(express.json());
+app.use(cookieParser());
 
-app.use(cookieParser())
+// CORS (production-safe)
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://your-frontend.vercel.app"
+];
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true
+  })
+);
 
-app.use('/api/auth', authRouter);
+// ---------------- ROUTES ----------------
+app.use("/api/auth", authRouter);
+app.use("/api/jobs", jobRouter);
+app.use("/api/application", ApplicationRouter);
+app.use("/api/profile", profileRouter);
+app.use("/api/admin", adminRouter);
 
-app.use('/api/jobs', jobRouter);
+// ---------------- START SERVER SAFELY ----------------
+const startServer = async () => {
+  try {
+    await connectToDb();
+    await connectCloudinary();
 
-app.use('/api/application/', ApplicationRouter)
+    const PORT = process.env.PORT || 5000;
 
-app.use('/api/profile', profileRouter)
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Server failed to start:", error);
+    process.exit(1);
+  }
+};
 
-app.use('/api/admin', adminRouter)
-
-connectToDb();
-
-connectCloudinary();
-
-app.listen(5000, () => console.log("Server is running on port 5000"));
+startServer();
