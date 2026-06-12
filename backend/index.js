@@ -23,9 +23,8 @@ app.use(cookieParser());
 // CORS (production-safe)
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://job-portal-1lzk-egw4tqsct-aryanbhatti777s-projects.vercel.app/"
+  process.env.FRONTEND_URL || "https://job-portal-1lzk-egw4tqsct-aryanbhatti777s-projects.vercel.app"
 ];
-
 app.use(
   cors({
     origin: function (origin, callback) {
