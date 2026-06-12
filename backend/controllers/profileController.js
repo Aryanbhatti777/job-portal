@@ -75,16 +75,12 @@ export const uploadResume = async (req, res) => {
                     folder: "resumes",
                     resource_type: "raw",
                     public_id: `resume_${userId}`,
-                    overwrite: true
+                    overwrite: true,
+                    invalidate: true
                 },
                 (error, result) => {
-                    if (error) {
-                        console.error("Cloudinary Upload Error:", error);
-                        reject(error);
-                    } else {
-                        console.log("Cloudinary Success:", result);
-                        resolve(result);
-                    }
+                    if (error) reject(error);
+                    else resolve(result);
                 }
             );
 
@@ -115,6 +111,8 @@ export const uploadResume = async (req, res) => {
             originalName: req.file.originalname,
             uploadedAt: new Date()
         };
+
+        await user.save();
 
         console.log("Saving user...");
 
