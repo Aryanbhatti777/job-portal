@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { getMyApplications, uploadResume } from "../services/applicationService";
 import Loader from "../components/Loader";
-import styles from "../styles/Profile.module.css";
+import styles from "../styles/profile.module.css";
 
 const Profile = () => {
   const { user, loading, fetchUser } = useContext(AuthContext);
