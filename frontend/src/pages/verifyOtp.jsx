@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { verifyOtp } from "../services/authService";
 import axiosInstance from "../utils/axiosInstance";
-import styles from "../styles/VerifyOtp.module.css";
+import styles from "../styles/verifyOtp.module.css";
 
 const VerifyOtp = () => {
   const location = useLocation();
