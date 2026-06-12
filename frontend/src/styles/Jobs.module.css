@@ -1,13 +1,13 @@
 .page {
   min-height: 100vh;
   background: #f8fafc;
-  margin: 0;
+  margin-bottom: -50px;
 }
 
 /* ================= HERO ================= */
 
 .hero {
-  min-height: 90vh;
+  min-height: 85vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -206,7 +206,7 @@
 /* ================= PAGE HEADER ================= */
 
 .pageHeader {
-  padding: 80px 60px 25px;
+  padding: 60px 60px 20px;
 }
 
 .pageHeader h2 {
@@ -266,7 +266,7 @@
 /* ================= JOB GRID ================= */
 
 .gridList {
-  padding: 0 60px 100px;
+ padding: 0 60px 70px;
 
   display: grid;
 
@@ -291,28 +291,86 @@
     0 10px 20px rgba(15, 23, 42, 0.05);
 }
 
+/* ================= LOAD MORE ================= */
+
+.loadMoreWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 60px;
+}
+
+.loadMoreBtn {
+  background: linear-gradient(135deg, #2563eb, #1e3a8a);
+  color: white;
+
+  border: none;
+  padding: 12px 22px;
+
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+}
+
+.loadMoreBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(37, 99, 235, 0.35);
+}
+
+.loadMoreBtn:active {
+  transform: translateY(-1px);
+}
+
 /* ================= MOBILE ================= */
 
-@media (max-width: 992px) {
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
   .hero {
-    min-height: auto;
+    padding: 80px 40px;
+    gap: 50px;
+  }
 
-    padding: 80px 20px;
+  .heroCopy h1 {
+    font-size: 3.2rem;
+  }
 
+  .heroCard {
+    min-width: 300px;
+  }
+
+  .pageHeader,
+  .searchBarContainer,
+  .gridList {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .gridList {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
+@media (max-width: 768px) {
+  .hero {
     flex-direction: column;
-
     text-align: center;
-
+    padding: 70px 20px;
     gap: 40px;
   }
 
   .heroCopy h1 {
-    font-size: 2.8rem;
+    font-size: 2.4rem;
   }
 
-  .heroCard {
-    width: 100%;
-    min-width: auto;
+  .heroCopy p {
+    font-size: 1rem;
   }
 
   .heroActions {
@@ -320,14 +378,62 @@
     flex-wrap: wrap;
   }
 
-  .pageHeader,
-  .searchBarContainer,
-  .gridList {
-    padding-left: 20px;
-    padding-right: 20px;
+  .heroCard {
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .pageHeader {
+    padding: 60px 20px 20px;
+    text-align: center;
+  }
+
+  .searchBarContainer {
+    padding: 0 20px 30px;
   }
 
   .gridList {
+    padding: 0 20px 80px;
     grid-template-columns: 1fr;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .hero {
+    padding: 60px 16px;
+  }
+
+  .heroCopy h1 {
+    font-size: 1.9rem;
+    line-height: 1.2;
+  }
+
+  .heroPill {
+    font-size: 0.8rem;
+    padding: 8px 14px;
+  }
+
+  .btnSignup,
+  .btnSecondary {
+    width: 100%;
+    padding: 12px 18px;
+  }
+
+  .heroCard {
+    padding: 20px;
+  }
+
+  .heroCard strong {
+    font-size: 1.6rem;
+  }
+
+  .searchInput {
+    padding: 16px 18px;
+    border-radius: 14px;
+  }
+
+  .emptyState {
+    padding: 30px;
   }
 }

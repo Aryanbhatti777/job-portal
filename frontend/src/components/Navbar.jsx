@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axiosInstance from "../utils/axiosInstance";
@@ -8,6 +8,8 @@ const Navbar = () => {
   const { user, setUser, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -30,6 +32,8 @@ const Navbar = () => {
     }
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   if (loading) {
     return (
       <nav className={styles.navbar}>
@@ -40,74 +44,92 @@ const Navbar = () => {
     );
   }
 
+  const NavLinks = () => (
+    <>
+      <Link onClick={closeMenu} to="/" className={`${styles.link} ${isActive("/") ? styles.active : ""}`}>
+        Home
+      </Link>
+
+      <Link onClick={closeMenu} to="/jobs" className={`${styles.link} ${isActive("/jobs") ? styles.active : ""}`}>
+        Jobs
+      </Link>
+
+      <Link onClick={closeMenu} to="/about" className={`${styles.link} ${isActive("/about") ? styles.active : ""}`}>
+        About
+      </Link>
+
+      <Link onClick={closeMenu} to="/contact" className={`${styles.link} ${isActive("/contact") ? styles.active : ""}`}>
+        Contact
+      </Link>
+
+      {user && user.role === "admin" && (
+        <Link onClick={closeMenu} to="/admin" className={styles.link}>
+          Admin
+        </Link>
+      )}
+
+      {!user ? (
+        <>
+          <Link onClick={closeMenu} to="/login" className={styles.buttonOutline}>
+            Login
+          </Link>
+
+          <Link onClick={closeMenu} to="/signup" className={styles.buttonPrimary}>
+            Signup
+          </Link>
+        </>
+      ) : (
+        <>
+          <Link onClick={closeMenu} to="/profile" className={styles.user}>
+            <span className={styles.avatar}>{initials}</span>
+            <span>{firstName}</span>
+          </Link>
+
+          <button className={styles.logout} onClick={handleLogout}>
+            Logout
+          </button>
+        </>
+      )}
+    </>
+  );
+
   return (
     <nav className={styles.navbar}>
-      
-      {/* LEFT */}
-      <div className={styles.left}>
-        <Link to="/" className={styles.brand}>
-          Satisfying Jobs
-        </Link>
-      </div>
+  {/* LEFT */}
+  <div className={styles.left}>
+    <Link to="/" className={styles.brand}>
+      Satisfying Jobs
+    </Link>
+  </div>
 
-      {/* RIGHT */}
-      <div className={styles.right}>
-        <Link
-          to="/"
-          className={`${styles.link} ${isActive("/") ? styles.active : ""}`}
-        >
-          Home
-        </Link>
+  {/* HAMBURGER (MOVE HERE) */}
+  <button
+    className={styles.hamburger}
+    onClick={() => setMenuOpen(true)}
+  >
+    ☰
+  </button>
 
-        <Link
-          to="/jobs"
-          className={`${styles.link} ${isActive("/jobs") ? styles.active : ""}`}
-        >
-          Jobs
-        </Link>
-        <Link
-          to="/about"
-          className={`${styles.link} ${isActive("/about") ? styles.active : ""}`}
-        >
-          About
-        </Link>
-        <Link
-          to="/contact"
-          className={`${styles.link} ${isActive("/contact") ? styles.active : ""}`}
-        >
-          Contact
-        </Link>
+  {/* DESKTOP MENU */}
+  <div className={styles.right}>
+    <NavLinks />
+  </div>
 
-        {!user ? (
-          <>
-            <Link to="/login" className={styles.buttonOutline}>
-              Login
-            </Link>
+  {/* OVERLAY */}
+  <div
+    className={`${styles.overlay} ${menuOpen ? styles.showOverlay : ""}`}
+    onClick={closeMenu}
+  />
 
-            <Link to="/signup" className={styles.buttonPrimary}>
-              Signup
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link to="/profile" className={styles.user}>
-              <span className={styles.avatar}>{initials}</span>
-              <span>{firstName}</span>
-            </Link>
+  {/* DRAWER */}
+  <div className={`${styles.drawer} ${menuOpen ? styles.open : ""}`}>
+    <button className={styles.closeBtn} onClick={closeMenu}>
+      ✕
+    </button>
 
-            {user.role === "admin" && (
-              <Link to="/admin" className={styles.link}>
-                Admin
-              </Link>
-            )}
-
-            <button className={styles.logout} onClick={handleLogout}>
-              Logout
-            </button>
-          </>
-        )}
-      </div>
-    </nav>
+    <NavLinks />
+  </div>
+</nav>
   );
 };
 

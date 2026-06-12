@@ -52,3 +52,67 @@
   font-size: 14px;
   color: #94a3b8;
 }
+
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
+  .footerGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .siteFooter {
+    padding: 50px 20px 20px;
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
+@media (max-width: 768px) {
+  .footerGrid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    text-align: center;
+  }
+
+  .footerGrid a {
+    display: inline-block;
+    margin: 6px 10px;
+  }
+
+  .footerBrand {
+    text-align: center;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .siteFooter {
+    padding: 40px 16px 16px;
+    margin-top: 60px;
+  }
+
+  .footerBrand h3 {
+    font-size: 20px;
+  }
+
+  .footerBrand p {
+    font-size: 14px;
+  }
+
+  .footerGrid h4 {
+    font-size: 16px;
+  }
+
+  .footerGrid a {
+    font-size: 14px;
+    margin: 5px 8px;
+  }
+
+  .footerBottom {
+    margin-top: 30px;
+    padding-top: 15px;
+  }
+
+  .footerBottom p {
+    font-size: 13px;
+  }
+}

@@ -214,24 +214,109 @@
 
 /* MOBILE */
 
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
+  .page {
+    padding: 25px;
+  }
+
+  .item {
+    padding: 18px;
+  }
+
+  .header h2 {
+    font-size: 1.7rem;
+  }
+
+  .modal {
+    height: 85vh;
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
 @media (max-width: 768px) {
+  .page {
+    padding: 18px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
   .item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 18px;
+    gap: 14px;
   }
 
   .right {
     width: 100%;
+    justify-content: flex-start;
   }
 
+  .resumeBtn,
   .approveBtn,
   .rejectBtn {
-    flex: 1;
+    width: 100%;
+    text-align: center;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  .header p {
+    font-size: 0.95rem;
   }
 
   .modal {
     width: 95%;
-    height: 85vh;
+    height: 80vh;
+  }
+
+  .closeBtn {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .page {
+    padding: 14px;
+  }
+
+  .item {
+    padding: 14px;
+  }
+
+  .left h3 {
+    font-size: 1rem;
+  }
+
+  .left p {
+    font-size: 0.9rem;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+
+  .resumeBtn,
+  .approveBtn,
+  .rejectBtn {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .modal {
+    height: 75vh;
+    border-radius: 14px;
+  }
+
+  .closeBtn {
+    font-size: 0.9rem;
+    padding: 10px;
   }
 }

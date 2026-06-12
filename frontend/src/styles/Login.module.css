@@ -210,16 +210,95 @@
 
 /* Mobile */
 
-@media (max-width: 600px) {
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
   .loginCard {
-    padding: 25px;
+    padding: 32px;
+    border-radius: 24px;
+  }
+
+  .header h2 {
+    font-size: 2rem;
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
+@media (max-width: 768px) {
+  .page {
+    padding: 30px 16px;
+  }
+
+  .loginCard {
+    padding: 26px;
+    border-radius: 22px;
   }
 
   .header h2 {
     font-size: 1.8rem;
   }
 
+  .header p {
+    font-size: 0.95rem;
+  }
+
+  .form {
+    gap: 16px;
+  }
+
+  .formGroup input {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+
+  .loginBtn {
+    padding: 14px;
+  }
+
+  .footer {
+    font-size: 0.9rem;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
   .page {
+    padding: 20px 12px;
+  }
+
+  .loginCard {
     padding: 20px;
+    border-radius: 18px;
+  }
+
+  .header h2 {
+    font-size: 1.5rem;
+  }
+
+  .header p {
+    font-size: 0.85rem;
+  }
+
+  .formGroup label {
+    font-size: 0.9rem;
+  }
+
+  .formGroup input {
+    padding: 11px 12px;
+    border-radius: 12px;
+  }
+
+  .passwordToggle {
+    font-size: 1rem;
+    right: 12px;
+  }
+
+  .loginBtn {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 4px;
   }
 }

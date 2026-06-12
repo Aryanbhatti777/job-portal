@@ -108,3 +108,95 @@
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
+  .card {
+    padding: 32px;
+    border-radius: 24px;
+  }
+
+  .header h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
+@media (max-width: 768px) {
+  .page {
+    padding: 30px 16px;
+    align-items: flex-start; /* important fix */
+  }
+
+  .card {
+    padding: 26px;
+    border-radius: 22px;
+  }
+
+  .header h2 {
+    font-size: 1.6rem;
+  }
+
+  .header p {
+    font-size: 0.95rem;
+  }
+
+  .form {
+    gap: 14px;
+  }
+
+  .formGroup input,
+  .formGroup select {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+
+  .button {
+    padding: 14px;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .page {
+    padding: 20px 12px;
+  }
+
+  .card {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .header h2 {
+    font-size: 1.4rem;
+  }
+
+  .header p {
+    font-size: 0.85rem;
+  }
+
+  .form {
+    gap: 12px;
+  }
+
+  .formGroup label {
+    font-size: 0.9rem;
+  }
+
+  .formGroup input,
+  .formGroup select {
+    padding: 11px 12px;
+    font-size: 0.9rem;
+    border-radius: 12px;
+  }
+
+  .passwordToggle {
+    font-size: 1rem;
+    right: 10px;
+  }
+
+  .button {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+}

@@ -210,19 +210,115 @@
 
 /* MOBILE */
 
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
+  .page {
+    padding: 25px;
+  }
+
+  .pageHeader h2 {
+    font-size: 1.7rem;
+  }
+
+  .jobItem {
+    padding: 16px;
+  }
+
+  .card h3 {
+    font-size: 1.3rem;
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
 @media (max-width: 768px) {
+  .page {
+    padding: 18px;
+  }
+
   .pageHeader {
     flex-direction: column;
     align-items: flex-start;
   }
 
+  .dashboardActions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .createBtn,
+  .applicationBtn {
+    width: 90%;
+    text-align: center;
+  }
+
+  /* KEY FIX: stack job items */
   .jobItem {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
+    gap: 12px;
+  }
+
+  .jobInfo {
+    width: 100%;
   }
 
   .actionLinks {
     width: 100%;
+    justify-content: flex-start;
+  }
+
+  .editBtn,
+  .applicantsBtn,
+  .deleteBtn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .page {
+    padding: 14px;
+  }
+
+  .pageHeader h2 {
+    font-size: 1.4rem;
+  }
+
+  .pageHeader p {
+    font-size: 0.9rem;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .statCard {
+    padding: 18px;
+  }
+
+  .statCard strong {
+    font-size: 1.6rem;
+  }
+
+  .jobItem {
+    padding: 14px;
+  }
+
+  .jobInfo strong {
+    font-size: 1rem;
+  }
+
+  .jobInfo p {
+    font-size: 0.9rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
   }
 }

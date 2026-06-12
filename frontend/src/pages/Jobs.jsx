@@ -11,21 +11,14 @@ import styles from "../styles/Jobs.module.css";
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [searchQuery, setSearchQuery] = useState("");
+
+  // pagination state
+  const [visibleCount, setVisibleCount] = useState(8);
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  const fadeUp = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-    },
-  };
 
   const fetchJobs = async () => {
     try {
@@ -38,6 +31,10 @@ const Jobs = () => {
     }
   };
 
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
   const filteredJobs = jobs.filter((job) => {
     const query = searchQuery.toLowerCase();
 
@@ -49,19 +46,17 @@ const Jobs = () => {
     );
   });
 
-  useEffect(() => {
-    fetchJobs();
-  }, []);
+  const visibleJobs = filteredJobs.slice(0, visibleCount);
+
+  const loadMore = () => {
+    setVisibleCount((prev) => prev + 8);
+  };
 
   useEffect(() => {
     if (location.hash) {
       const target = document.querySelector(location.hash);
-
       if (target) {
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
   }, [location]);
@@ -69,103 +64,67 @@ const Jobs = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className={styles.page}>
-      {/* PAGE HEADER */}
-
-      <motion.div
-        className={styles.pageHeader}
-        id="jobs"
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-      >
+    <div className={styles.page} id="jobs">
+      {/* HEADER */}
+      <div className={styles.pageHeader}>
         <div>
           <h2>Open Positions</h2>
-
-          <p>
-            Browse available opportunities and click on a role
-            to view complete details.
-          </p>
+          <p>Browse available opportunities and click to view details.</p>
         </div>
-      </motion.div>
+      </div>
 
-      {/* SEARCH BAR */}
-
-      <motion.div
-        className={styles.searchBarContainer}
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        transition={{
-          duration: 0.7,
-          delay: 0.2,
-        }}
-      >
+      {/* SEARCH */}
+      <div className={styles.searchBarContainer}>
         <input
           type="text"
-          placeholder="Search by job title, company, location or skills..."
+          placeholder="Search jobs..."
           value={searchQuery}
-          onChange={(e) =>
-            setSearchQuery(e.target.value)
-          }
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setVisibleCount(8); // reset pagination on search
+          }}
           className={styles.searchInput}
         />
 
         {searchQuery && (
           <p className={styles.searchResultsInfo}>
-            {filteredJobs.length} job
-            {filteredJobs.length !== 1 ? "s" : ""} found
+            {filteredJobs.length} job(s) found
           </p>
         )}
-      </motion.div>
+      </div>
 
-      {/* JOBS GRID */}
-
+      {/* GRID */}
       <div className={styles.gridList}>
-        {filteredJobs.length === 0 ? (
-          <motion.div
-            className={styles.emptyState}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            {searchQuery
-              ? `No jobs match "${searchQuery}".`
-              : "No jobs found."}
-          </motion.div>
+        {visibleJobs.length === 0 ? (
+          <div className={styles.emptyState}>
+            No jobs found
+          </div>
         ) : (
-          filteredJobs.map((job, index) => (
+          visibleJobs.map((job, index) => (
             <motion.div
               key={job._id}
-              initial={{
-                opacity: 0,
-                y: 40,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-                amount: 0.15,
-              }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.08,
-              }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
             >
               <JobCard
                 job={job}
-                onClick={() =>
-                  navigate(`/jobs/${job._id}`)
-                }
+                onClick={() => navigate(`/jobs/${job._id}`)}
               />
             </motion.div>
           ))
         )}
       </div>
+
+      {/* LOAD MORE BUTTON */}
+      {visibleCount < filteredJobs.length && (
+        <div className={styles.loadMoreWrapper}>
+          <button className={styles.loadMoreBtn} onClick={loadMore}>
+            Load More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

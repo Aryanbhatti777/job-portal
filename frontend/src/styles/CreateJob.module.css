@@ -85,12 +85,81 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
   .formCard {
-    padding: 20px;
+    padding: 28px;
   }
 
   .page h2 {
-    font-size: 1.7rem;
+    font-size: 1.8rem;
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
+@media (max-width: 768px) {
+  .page {
+    padding: 30px 16px;
+  }
+
+  .formCard {
+    padding: 22px;
+    gap: 16px;
+  }
+
+  .page h2 {
+    font-size: 1.6rem;
+    margin-bottom: 22px;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .textarea {
+    min-height: 120px;
+  }
+
+  .submitBtn {
+    padding: 14px;
+    font-size: 15px;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .page {
+    padding: 24px 12px;
+  }
+
+  .formCard {
+    padding: 18px;
+    border-radius: 16px;
+    gap: 14px;
+  }
+
+  .page h2 {
+    font-size: 1.4rem;
+  }
+
+  .label {
+    font-size: 14px;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    padding: 11px;
+    font-size: 13.5px;
+    border-radius: 10px;
+  }
+
+  .submitBtn {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 10px;
   }
 }

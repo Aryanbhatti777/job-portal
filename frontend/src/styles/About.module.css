@@ -1,5 +1,5 @@
 .aboutSection {
-  padding: 120px 80px;
+  padding: 10px 80px;
   background: #f8fafc;
   overflow: hidden;
 }
@@ -140,22 +140,80 @@
 
 /* ================= MOBILE ================= */
 
-@media (max-width: 992px) {
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
   .aboutSection {
-    padding: 90px 20px;
+    padding: 90px 40px;
   }
 
   .aboutGrid {
     grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .aboutPhoto {
-    height: 350px;
-    order: -1;
+    gap: 50px;
   }
 
   .sectionHeading h2 {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
+  }
+
+  .aboutPhoto {
+    height: 450px;
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
+@media (max-width: 768px) {
+  .aboutSection {
+    padding: 70px 20px;
+  }
+
+  .sectionHeading {
+    margin-bottom: 50px;
+  }
+
+  .sectionHeading h2 {
+    font-size: 2rem;
+  }
+
+  .sectionHeading p {
+    font-size: 1rem;
+  }
+
+  .featureCard {
+    padding: 22px;
+    border-radius: 18px;
+  }
+
+  .aboutPhoto {
+    height: 380px;
+    border-radius: 24px;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .aboutSection {
+    padding: 60px 16px;
+  }
+
+  .sectionHeading h2 {
+    font-size: 1.7rem;
+  }
+
+  .sectionLabel {
+    font-size: 0.75rem;
+    padding: 8px 14px;
+  }
+
+  .featureCard h3 {
+    font-size: 1.1rem;
+  }
+
+  .featureCard p {
+    font-size: 0.95rem;
+  }
+
+  .aboutPhoto {
+    height: 300px;
+    border-radius: 18px;
   }
 }

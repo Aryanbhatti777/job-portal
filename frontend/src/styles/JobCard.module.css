@@ -119,21 +119,83 @@
 
 /* Mobile */
 
-@media (max-width: 768px) {
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
   .card {
-    min-height: auto;
-  }
-
-  .top {
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 20px;
+    border-radius: 18px;
   }
 
   .title {
     font-size: 1.2rem;
   }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
+@media (max-width: 768px) {
+  .card {
+    padding: 18px;
+    min-height: auto;
+    width: 90%;
+  }
+
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .company {
+    font-size: 0.9rem;
+  }
+
+  .desc {
+    font-size: 0.9rem;
+    margin: 14px 0;
+  }
 
   .meta {
     gap: 8px;
+  }
+
+  .pill {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .company {
+    font-size: 0.85rem;
+  }
+
+  .desc {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .badgeOpen,
+  .badgeClosed {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .pill {
+    font-size: 11px;
+    padding: 6px 10px;
   }
 }

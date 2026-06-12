@@ -111,9 +111,25 @@
   color: #475569;
 }
 
-@media (max-width: 768px) {
+/* ================= TABLET (<= 1024px) ================= */
+@media (max-width: 1024px) {
+  .formCard {
+    padding: 28px;
+  }
+
+  .heading {
+    font-size: 1.8rem;
+  }
+
   .row {
-    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ================= MOBILE (<= 768px) ================= */
+@media (max-width: 768px) {
+  .page {
+    padding: 30px 16px;
   }
 
   .formCard {
@@ -121,6 +137,74 @@
   }
 
   .heading {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
+  }
+
+  .subheading {
+    font-size: 0.95rem;
+  }
+
+  /* KEY FIX: stack inputs */
+  .row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .textarea {
+    min-height: 120px;
+  }
+
+  .submitBtn {
+    padding: 14px;
+    font-size: 14px;
+  }
+}
+
+/* ================= SMALL MOBILE (<= 480px) ================= */
+@media (max-width: 480px) {
+  .page {
+    padding: 24px 12px;
+  }
+
+  .formCard {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .heading {
+    font-size: 1.4rem;
+  }
+
+  .subheading {
+    font-size: 0.9rem;
+  }
+
+  .form {
+    gap: 18px;
+  }
+
+  .formGroup label {
+    font-size: 13px;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    padding: 11px 12px;
+    font-size: 13.5px;
+    border-radius: 10px;
+  }
+
+  .submitBtn {
+    padding: 12px;
+    font-size: 13.5px;
+    border-radius: 10px;
   }
 }

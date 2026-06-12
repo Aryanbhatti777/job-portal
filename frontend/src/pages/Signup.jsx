@@ -9,12 +9,12 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    role: "seeker",
-    adminCode: ""
+    role: "seeker"
   });
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -36,7 +36,14 @@ const Signup = () => {
 
     try {
       setLoading(true);
-      await requestOtp(form);
+
+      // force role here (important even if someone manipulates frontend)
+      const payload = {
+        ...form,
+        role: "seeker"
+      };
+
+      await requestOtp(payload);
 
       navigate(`/verify-otp?email=${encodeURIComponent(form.email)}`, {
         replace: true
@@ -100,27 +107,6 @@ const Signup = () => {
               </button>
             </div>
           </div>
-
-          <div className={styles.formGroup}>
-            <label>Account type</label>
-            <select name="role" value={form.role} onChange={handleChange}>
-              <option value="seeker">Job seeker</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          {form.role === "admin" && (
-            <div className={styles.formGroup}>
-              <label>Admin code</label>
-              <input
-                name="adminCode"
-                value={form.adminCode}
-                placeholder="Enter admin secret"
-                onChange={handleChange}
-                required
-              />
-            </div>
-          )}
 
           <button className={styles.button} disabled={loading}>
             {loading ? "Sending OTP..." : "Send OTP"}
