@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { verifyOtp } from "../services/authService";
 import axiosInstance from "../utils/axiosInstance";
-import styles from "../styles/verifyOtp.module.css";
+import styles from "../styles/VerifyOtp.module.css";
 
 const VerifyOtp = () => {
   const location = useLocation();
@@ -19,41 +19,54 @@ const VerifyOtp = () => {
   const inputRefs = useRef([]);
 
   const handleSubmit = async () => {
-    const finalOtp = otp.join("");
+  const finalOtp = otp.join("");
 
-    if (!email) {
-      setError("Missing email");
-      return;
-    }
+  if (!email) {
+    setError("Missing email");
+    return;
+  }
 
-    if (finalOtp.length !== 6) {
-      setError("Enter complete OTP");
-      return;
-    }
+  if (finalOtp.length !== 6) {
+    setError("Enter complete OTP");
+    return;
+  }
 
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      await verifyOtp({
-        email,
-        otp: finalOtp,
-      });
+    console.log("Verifying OTP...");
 
-      const userRes = await axiosInstance.get("/profile/me");
+    const otpRes = await verifyOtp({
+      email,
+      otp: finalOtp,
+    });
 
-      setUser(userRes.data.user);
+    console.log("OTP Success:", otpRes.data);
 
-      navigate(
-        userRes.data.user.role === "admin" ? "/admin" : "/",
-        { replace: true }
-      );
-    } catch (err) {
-      setError(err.response?.data?.message || "OTP verification failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const userRes = await axiosInstance.get("/profile/me");
+
+    console.log("Profile Success:", userRes.data);
+
+    setUser(userRes.data.user);
+
+    navigate(
+      userRes.data.user.role === "admin" ? "/admin" : "/",
+      { replace: true }
+    );
+  } catch (err) {
+    console.error("VERIFY OTP ERROR:", err);
+    console.error("RESPONSE:", err.response?.data);
+
+    setError(
+      err.response?.data?.message ||
+      err.message ||
+      "OTP verification failed"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleChange = (index, value) => {
     const digit = value.replace(/\D/g, "").slice(-1);
