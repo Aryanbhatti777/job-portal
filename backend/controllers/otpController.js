@@ -73,7 +73,10 @@ export const sendOtp = async (req, res) => {
                 expiresAt: new Date(Date.now() + 5 * 60 * 1000),
                 lastSentAt: new Date()
             },
-            { upsert: true, new: true }
+            {
+                upsert: true,
+                returnDocument: "after"
+            }
         );
 
         await sendEmail(email, otp)
