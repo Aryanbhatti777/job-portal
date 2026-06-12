@@ -1,1 +1,1 @@
-web: cd backend && npm start
+web: mkdir -p backend/uploads && cd backend && npm start
