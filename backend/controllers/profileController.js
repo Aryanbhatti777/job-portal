@@ -40,6 +40,8 @@ export const upload = multer({ storage });
 export const uploadResume = async (req, res) => {
     try {
         const userId = req.user.id;
+        console.log("📁 Upload started for user:", userId);
+        console.log("📄 File received:", req.file?.originalname, "Size:", req.file?.size);
 
         if (!req.file) {
             return res.status(400).json({ message: "Please upload a file" });
@@ -53,11 +55,16 @@ export const uploadResume = async (req, res) => {
                     folder: "resumes",
                     resource_type: "raw",
                     public_id: `resume_${userId}`,
-                    type: "upload"  // ← Important: default public upload
+                    type: "upload"
                 },
                 (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
+                    if (error) {
+                        console.error("❌ Cloudinary error:", error);
+                        reject(error);
+                    } else {
+                        console.log("✅ Upload success:", result.secure_url);
+                        resolve(result);
+                    }
                 }
             );
             uploadStream.end(req.file.buffer);
@@ -77,6 +84,7 @@ export const uploadResume = async (req, res) => {
         };
 
         await user.save();
+        console.log("💾 Resume saved to database");
 
         return res.status(200).json({
             message: "Resume uploaded successfully",
@@ -84,7 +92,7 @@ export const uploadResume = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Upload error:", error);
+        console.error("❌ Upload error:", error.message);
         return res.status(500).json({ message: error.message });
     }
 };
