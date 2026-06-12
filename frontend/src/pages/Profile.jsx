@@ -90,7 +90,7 @@ const Profile = () => {
                   <p className={styles.resumeRow}>
                     <span>{user.resume.originalName || "Uploaded resume"}</span>
                     <a
-                      href={`${user.resume.url}?fl_attachment:false`}
+                      href={user.resume.url}
                       target="_blank"
                       rel="noreferrer"
                     >

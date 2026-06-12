@@ -51,23 +51,23 @@ export const uploadResume = async (req, res) => {
 
         // Upload directly from buffer - no disk needed!
         const result = await new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-        {
-            folder: "resumes",
-            resource_type: "auto",  // ← Auto-detect file type
-            public_id: `resume_${userId}`
-        },
-        (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-        }
-    );
-    uploadStream.end(req.file.buffer);
-});
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "resumes",
+                    resource_type: "raw",  // ← Correct for PDFs/documents
+                    public_id: `resume_${userId}`
+                },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+            uploadStream.end(req.file.buffer);
+        });
 
         if (user.resume?.public_id) {
             await cloudinary.uploader.destroy(user.resume.public_id, {
-                resource_type: "raw"
+                resource_type: "raw"  // ← Match this too
             });
         }
 
