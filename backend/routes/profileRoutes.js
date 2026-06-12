@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { checkIsLoggedIn } from "../middleware/authMiddleware.js";
-import { getApplications, getMe, uploadResume } from "../controllers/profileController.js";
-import { upload } from "../middleware/upload.js";
+import { getApplications, getMe, upload, uploadResume } from "../controllers/profileController.js";
+
 
 export const profileRouter = Router();
 

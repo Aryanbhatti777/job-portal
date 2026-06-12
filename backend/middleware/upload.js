@@ -1,12 +1,6 @@
 import multer from "multer";
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.originalname);
-    }
-});
+// Use memoryStorage instead of diskStorage for Railway compatibility
+const storage = multer.memoryStorage();
 
 export const upload = multer({ storage });

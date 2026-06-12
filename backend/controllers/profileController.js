@@ -31,6 +31,12 @@ export const getMe = async (req, res) => {
     }
 }
 
+import multer from "multer";
+
+// Don't use diskStorage - use memory storage
+const storage = multer.memoryStorage();
+export const upload = multer({ storage });
+
 export const uploadResume = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -43,10 +49,20 @@ export const uploadResume = async (req, res) => {
 
         const user = await User.findById(userId);
 
-
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "resumes",
-            resource_type: "raw"
+        // Upload directly from buffer - no disk needed!
+        const result = await new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "resumes",
+                    resource_type: "raw",
+                    public_id: `resume_${userId}`
+                },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+            uploadStream.end(req.file.buffer);
         });
 
         if (user.resume?.public_id) {
@@ -54,8 +70,6 @@ export const uploadResume = async (req, res) => {
                 resource_type: "raw"
             });
         }
-
-        fs.unlinkSync(req.file.path);
 
         user.resume = {
             url: result.secure_url,
