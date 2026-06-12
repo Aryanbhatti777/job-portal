@@ -26,7 +26,6 @@
     "resend": "^6.12.4"
   },
   "devDependencies": {
-    "nodemo": "^1.0.0",
     "nodemon": "^3.1.14"
   }
 }
