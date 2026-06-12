@@ -5,7 +5,6 @@ import Login from "../pages/Login";
 import Jobs from "../pages/Jobs";
 import JobDetails from "../pages/JobDetails";
 import Profile from "../pages/Profile";
-import VerifyOtp from "../pages/verifyOtp";
 
 import Dashboard from "../pages/admin/Dashboard";
 import CreateJob from "../pages/admin/CreateJob";
@@ -17,6 +16,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Home from "../pages/Home";
+import VerifyOtp from "../pages/VerifyOtp";
 
 const AppRoutes = () => {
     return (
