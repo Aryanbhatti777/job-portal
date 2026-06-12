@@ -89,7 +89,11 @@ const Profile = () => {
                   <strong>Resume</strong>
                   <p className={styles.resumeRow}>
                     <span>{user.resume.originalName || "Uploaded resume"}</span>
-                    <a href={user.resume.url} target="_blank" rel="noreferrer">
+                    <a
+                      href={`${user.resume.url}?fl_attachment:false`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       View
                     </a>
                   </p>
@@ -113,8 +117,8 @@ const Profile = () => {
                 {uploading
                   ? "Uploading resume..."
                   : user?.resume?.url
-                  ? "Update resume"
-                  : "Upload resume"}
+                    ? "Update resume"
+                    : "Upload resume"}
               </span>
               <input
                 type="file"
