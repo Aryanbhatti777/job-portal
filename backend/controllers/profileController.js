@@ -90,20 +90,7 @@ export const uploadResume = async (req, res) => {
         console.log("Result secure_url:", result.secure_url);
         console.log("Result public_id:", result.public_id);
 
-        if (user.resume?.public_id) {
-            try {
-                await cloudinary.uploader.destroy(
-                    user.resume.public_id,
-                    {
-                        resource_type: "raw"
-                    }
-                );
-
-                console.log("Old resume deleted");
-            } catch (deleteError) {
-                console.error("Delete Error:", deleteError);
-            }
-        }
+        
 
         user.resume = {
             url: result.secure_url,
