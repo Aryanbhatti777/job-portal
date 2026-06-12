@@ -54,8 +54,10 @@ export const uploadResume = async (req, res) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 {
                     folder: "resumes",
-                    resource_type: "raw",  // ← Correct for PDFs/documents
-                    public_id: `resume_${userId}`
+                    resource_type: "raw",
+                    public_id: `resume_${userId}`,
+                    access_mode: "token",  // ← Add this
+                    type: "upload"          // ← Add this
                 },
                 (error, result) => {
                     if (error) reject(error);
