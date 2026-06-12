@@ -2,6 +2,8 @@ import { useState, useRef, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { verifyOtp } from "../services/authService";
+import axiosInstance from "../utils/axiosInstance";
+import styles from "../styles/VerifyOtp.module.css";
 
 const VerifyOtp = () => {
   const location = useLocation();
@@ -14,60 +16,146 @@ const VerifyOtp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const inputRefs = useRef([]);
+
   const handleSubmit = async () => {
     const finalOtp = otp.join("");
 
-    if (!email) return setError("Missing email");
-    if (finalOtp.length !== 6) return setError("Enter full OTP");
+    if (!email) {
+      setError("Missing email");
+      return;
+    }
+
+    if (finalOtp.length !== 6) {
+      setError("Enter complete OTP");
+      return;
+    }
 
     try {
       setLoading(true);
+      setError("");
 
-      const res = await verifyOtp({
+      await verifyOtp({
         email,
         otp: finalOtp,
       });
 
-      // backend must return actual user
-      const user = await axiosInstance.get("/profile/me");
+      const userRes = await axiosInstance.get("/profile/me");
 
-      setUser(user.data.user);
+      setUser(userRes.data.user);
 
-      navigate(user.data.user.role === "admin" ? "/admin" : "/", {
-        replace: true,
-      });
-
+      navigate(
+        userRes.data.user.role === "admin" ? "/admin" : "/",
+        { replace: true }
+      );
     } catch (err) {
-      setError(err.response?.data?.message || "OTP failed");
+      setError(err.response?.data?.message || "OTP verification failed");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleChange = (index, value) => {
+    const digit = value.replace(/\D/g, "").slice(-1);
+
+    const newOtp = [...otp];
+    newOtp[index] = digit;
+    setOtp(newOtp);
+
+    if (digit && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (index, e) => {
+    if (e.key === "Backspace") {
+      if (!otp[index] && index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+
+      const newOtp = [...otp];
+      newOtp[index] = "";
+      setOtp(newOtp);
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+
+    const pastedData = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+
+    if (!pastedData) return;
+
+    const newOtp = [...otp];
+
+    pastedData.split("").forEach((digit, index) => {
+      if (index < 6) {
+        newOtp[index] = digit;
+      }
+    });
+
+    setOtp(newOtp);
+
+    const lastIndex = Math.min(pastedData.length - 1, 5);
+    inputRefs.current[lastIndex]?.focus();
+  };
+
+  useEffect(() => {
+    if (!email) {
+      navigate("/signup");
+    }
+  }, [email, navigate]);
+
   return (
-    <div>
-      <h2>Verify OTP</h2>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <h2 className={styles.title}>Verify OTP</h2>
 
-      <p>Sent to: {email}</p>
+        <p className={styles.subtitle}>
+          Enter the 6-digit OTP sent to
+          <br />
+          <strong>{email}</strong>
+        </p>
 
-      {otp.map((v, i) => (
-        <input
-          key={i}
-          value={v}
-          maxLength={1}
-          onChange={(e) => {
-            const copy = [...otp];
-            copy[i] = e.target.value.slice(-1);
-            setOtp(copy);
-          }}
-        />
-      ))}
+        <div className={styles.otpContainer}>
+          {otp.map((digit, index) => (
+            <input
+              key={index}
+              ref={(el) => (inputRefs.current[index] = el)}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={1}
+              value={digit}
+              className={styles.otpInput}
+              onChange={(e) =>
+                handleChange(index, e.target.value)
+              }
+              onKeyDown={(e) =>
+                handleKeyDown(index, e)
+              }
+              onPaste={handlePaste}
+            />
+          ))}
+        </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <p className={styles.error}>
+            {error}
+          </p>
+        )}
 
-      <button onClick={handleSubmit} disabled={loading}>
-        {loading ? "Verifying..." : "Verify"}
-      </button>
+        <button
+          className={styles.button}
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? "Verifying..." : "Verify OTP"}
+        </button>
+      </div>
     </div>
   );
 };

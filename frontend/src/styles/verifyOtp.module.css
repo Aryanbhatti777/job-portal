@@ -1,0 +1,115 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8fafc;
+  padding: 20px;
+}
+
+.card {
+  width: 100%;
+  max-width: 450px;
+  background: #fff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 15px;
+  margin-bottom: 28px;
+  word-break: break-word;
+}
+
+.otpContainer {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.otpInput {
+  width: 52px;
+  height: 56px;
+  border: 2px solid #dbe3ec;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.otpInput:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.error {
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.button {
+  width: 100%;
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.resend {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.resend button {
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  .card {
+    padding: 24px;
+  }
+
+  .otpContainer {
+    gap: 8px;
+  }
+
+  .otpInput {
+    width: 44px;
+    height: 50px;
+    font-size: 18px;
+  }
+}
