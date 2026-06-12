@@ -42,22 +42,18 @@ export const uploadResume = async (req, res) => {
         const userId = req.user.id;
 
         if (!req.file) {
-            return res.status(400).json({
-                message: "Please upload a file"
-            });
+            return res.status(400).json({ message: "Please upload a file" });
         }
 
         const user = await User.findById(userId);
 
-        // Upload directly from buffer - no disk needed!
         const result = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 {
                     folder: "resumes",
                     resource_type: "raw",
                     public_id: `resume_${userId}`,
-                    access_mode: "token",  // ← Add this
-                    type: "upload"          // ← Add this
+                    type: "upload"  // ← Important: default public upload
                 },
                 (error, result) => {
                     if (error) reject(error);
@@ -69,7 +65,7 @@ export const uploadResume = async (req, res) => {
 
         if (user.resume?.public_id) {
             await cloudinary.uploader.destroy(user.resume.public_id, {
-                resource_type: "raw"  // ← Match this too
+                resource_type: "raw"
             });
         }
 
@@ -88,9 +84,8 @@ export const uploadResume = async (req, res) => {
         });
 
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
+        console.error("Upload error:", error);
+        return res.status(500).json({ message: error.message });
     }
 };
 
