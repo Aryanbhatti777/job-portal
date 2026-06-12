@@ -39,15 +39,35 @@ export const upload = multer({ storage });
 
 export const uploadResume = async (req, res) => {
     try {
-        const userId = req.user.id;
-        console.log("📁 Upload started for user:", userId);
-        console.log("📄 File received:", req.file?.originalname, "Size:", req.file?.size);
+        const userId = req.user?.id;
+
+        console.log("========== RESUME UPLOAD START ==========");
+        console.log("User ID:", userId);
+        console.log("File:", req.file);
+
+        if (!userId) {
+            return res.status(401).json({
+                message: "Unauthorized"
+            });
+        }
 
         if (!req.file) {
-            return res.status(400).json({ message: "Please upload a file" });
+            return res.status(400).json({
+                message: "Please upload a file"
+            });
         }
 
         const user = await User.findById(userId);
+
+        console.log("User found:", !!user);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        console.log("Starting Cloudinary upload...");
 
         const result = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
@@ -55,25 +75,38 @@ export const uploadResume = async (req, res) => {
                     folder: "resumes",
                     resource_type: "raw",
                     public_id: `resume_${userId}`,
-                    type: "upload"
+                    overwrite: true
                 },
                 (error, result) => {
                     if (error) {
-                        console.error("❌ Cloudinary error:", error);
+                        console.error("Cloudinary Upload Error:", error);
                         reject(error);
                     } else {
-                        console.log("✅ Upload success:", result.secure_url);
+                        console.log("Cloudinary Success:", result);
                         resolve(result);
                     }
                 }
             );
+
             uploadStream.end(req.file.buffer);
         });
 
+        console.log("Result secure_url:", result.secure_url);
+        console.log("Result public_id:", result.public_id);
+
         if (user.resume?.public_id) {
-            await cloudinary.uploader.destroy(user.resume.public_id, {
-                resource_type: "raw"
-            });
+            try {
+                await cloudinary.uploader.destroy(
+                    user.resume.public_id,
+                    {
+                        resource_type: "raw"
+                    }
+                );
+
+                console.log("Old resume deleted");
+            } catch (deleteError) {
+                console.error("Delete Error:", deleteError);
+            }
         }
 
         user.resume = {
@@ -83,17 +116,34 @@ export const uploadResume = async (req, res) => {
             uploadedAt: new Date()
         };
 
+        console.log("Saving user...");
+
         await user.save();
-        console.log("💾 Resume saved to database");
+
+        console.log("User saved");
+
+        const updatedUser = await User.findById(userId);
+
+        console.log(
+            "Resume in DB:",
+            updatedUser.resume
+        );
+
+        console.log("========== RESUME UPLOAD END ==========");
 
         return res.status(200).json({
+            success: true,
             message: "Resume uploaded successfully",
-            resume: user.resume
+            resume: updatedUser.resume
         });
 
     } catch (error) {
-        console.error("❌ Upload error:", error.message);
-        return res.status(500).json({ message: error.message });
+        console.error("UPLOAD ERROR:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
