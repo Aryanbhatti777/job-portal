@@ -41,9 +41,6 @@ export const uploadResume = async (req, res) => {
     try {
         const userId = req.user?.id;
 
-        console.log("========== RESUME UPLOAD START ==========");
-        console.log("User ID:", userId);
-        console.log("File:", req.file);
 
         if (!userId) {
             return res.status(401).json({
@@ -59,7 +56,6 @@ export const uploadResume = async (req, res) => {
 
         const user = await User.findById(userId);
 
-        console.log("User found:", !!user);
 
         if (!user) {
             return res.status(404).json({
@@ -87,9 +83,6 @@ export const uploadResume = async (req, res) => {
             uploadStream.end(req.file.buffer);
         });
 
-        console.log("Result secure_url:", result.secure_url);
-        console.log("Result public_id:", result.public_id);
-
         
 
         user.resume = {
@@ -101,20 +94,9 @@ export const uploadResume = async (req, res) => {
 
         await user.save();
 
-        console.log("Saving user...");
-
-        await user.save();
-
-        console.log("User saved");
 
         const updatedUser = await User.findById(userId);
 
-        console.log(
-            "Resume in DB:",
-            updatedUser.resume
-        );
-
-        console.log("========== RESUME UPLOAD END ==========");
 
         return res.status(200).json({
             success: true,
@@ -123,7 +105,6 @@ export const uploadResume = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("UPLOAD ERROR:", error);
 
         return res.status(500).json({
             success: false,
