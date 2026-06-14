@@ -56,6 +56,15 @@ const Profile = () => {
     setLoadingResume(false);
   };
 
+  const getDownloadUrl = (url) => {
+    return url.replace(
+      "/upload/",
+      `/upload/fl_attachment:${encodeURIComponent(
+        user.resume.originalName || "resume"
+      )}/`
+    );
+  };
+
   const closeResume = () => {
     setResumeUrl(null);
   };
@@ -125,8 +134,9 @@ const Profile = () => {
 
                       {/* ✅ Download button - direct download */}
                       <a
-                        href={user.resume.cloudinaryUrl || user.resume.url}
-                        download={`${user.resume.originalName || "resume"}`}
+                        href={getDownloadUrl(user.resume.url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{
                           color: "#28a745",
                           textDecoration: "underline",
