@@ -87,25 +87,14 @@ export const uploadResume = async (req, res) => {
 
         const cloudinaryUrl = result.secure_url;
 
-        const downloadUrl = cloudinary.url(result.public_id, {
-            resource_type: result.resource_type,
-            flags: "attachment",
-            secure: true,
-        });
-
         user.resume = {
             url: cloudinaryUrl,
-            downloadUrl,
             public_id: result.public_id,
             originalName: req.file.originalname,
             uploadedAt: new Date(),
         };
 
         await user.save();
-        console.log(result);
-        console.log(result.resource_type);
-        console.log(result.type);
-        console.log(result.secure_url);
 
         return res.status(200).json({
             success: true,
