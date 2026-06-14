@@ -57,13 +57,8 @@ const Profile = () => {
   };
 
   const getDownloadUrl = (url) => {
-    return url.replace(
-      "/upload/",
-      `/upload/fl_attachment:${encodeURIComponent(
-        user.resume.originalName || "resume"
-      )}/`
-    );
-  };
+  return url.replace("/upload/", "/upload/fl_attachment/");
+};
 
   const closeResume = () => {
     setResumeUrl(null);
