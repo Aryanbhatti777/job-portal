@@ -51,14 +51,11 @@ const Profile = () => {
   // ✅ Simple approach: Just open the URL directly (Cloudinary handles it with ?fl_inline)
   const handleViewResume = () => {
     if (!user?.resume?.url) return;
+
     setLoadingResume(true);
     setResumeUrl(user.resume.url);
     setLoadingResume(false);
   };
-
-  const getDownloadUrl = (url) => {
-  return url.replace("/upload/", "/upload/fl_attachment/");
-};
 
   const closeResume = () => {
     setResumeUrl(null);
@@ -129,7 +126,7 @@ const Profile = () => {
 
                       {/* ✅ Download button - direct download */}
                       <a
-                        href={getDownloadUrl(user.resume.url)}
+                        href={user.resume.downloadUrl || user.resume.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
