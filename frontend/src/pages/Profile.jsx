@@ -9,7 +9,8 @@ const Profile = () => {
   const [applications, setApplications] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
-  const [resumeUrl, setResumeUrl] = useState(null); // ✅ Added for modal
+  const [resumeUrl, setResumeUrl] = useState(null);
+  const [loadingResume, setLoadingResume] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -45,6 +46,18 @@ const Profile = () => {
     } finally {
       setUploading(false);
     }
+  };
+
+  // ✅ Simple approach: Just open the URL directly (Cloudinary handles it with ?fl_inline)
+  const handleViewResume = () => {
+    if (!user?.resume?.url) return;
+    setLoadingResume(true);
+    setResumeUrl(user.resume.url);
+    setLoadingResume(false);
+  };
+
+  const closeResume = () => {
+    setResumeUrl(null);
   };
 
   if (loading) return <Loader />;
@@ -90,20 +103,41 @@ const Profile = () => {
                   <strong>Resume</strong>
                   <p className={styles.resumeRow}>
                     <span>{user.resume.originalName || "Uploaded resume"}</span>
-                    {/* ✅ Changed: Use button instead of anchor tag */}
-                    <button
-                      onClick={() => setResumeUrl(user.resume.url)}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "#007bff",
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                        padding: 0
-                      }}
-                    >
-                      View
-                    </button>
+                    <div style={{ display: "flex", gap: "10px" }}>
+                      {/* ✅ View button - opens in modal */}
+                      <button
+                        onClick={handleViewResume}
+                        disabled={loadingResume}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          color: "#007bff",
+                          cursor: loadingResume ? "not-allowed" : "pointer",
+                          textDecoration: "underline",
+                          padding: 0,
+                          opacity: loadingResume ? 0.6 : 1,
+                          fontSize: "14px",
+                          fontWeight: "500"
+                        }}
+                      >
+                        {loadingResume ? "Loading..." : "View"}
+                      </button>
+
+                      {/* ✅ Download button - direct download */}
+                      <a
+                        href={user.resume.cloudinaryUrl || user.resume.url}
+                        download={`${user.resume.originalName || "resume"}`}
+                        style={{
+                          color: "#28a745",
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          fontWeight: "500"
+                        }}
+                      >
+                        Download
+                      </a>
+                    </div>
                   </p>
                 </div>
 
@@ -175,7 +209,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* ✅ RESUME MODAL */}
+      {/* ✅ RESUME MODAL - displays PDF inline */}
       {resumeUrl && (
         <div
           style={{
@@ -190,44 +224,76 @@ const Profile = () => {
             justifyContent: "center",
             zIndex: 1000
           }}
-          onClick={() => setResumeUrl(null)}
+          onClick={closeResume}
         >
           <div
             style={{
               background: "white",
               width: "90%",
-              height: "90%",
+              maxWidth: "900px",
+              height: "90vh",
               borderRadius: "8px",
               display: "flex",
               flexDirection: "column",
-              position: "relative"
+              position: "relative",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)"
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <iframe
+            {/* ✅ Embed PDF directly - ?fl_inline tells Cloudinary to show it inline */}
+            <embed
               src={resumeUrl}
+              type="application/pdf"
               style={{
                 flex: 1,
-                border: "none",
+                width: "100%",
                 borderRadius: "8px 8px 0 0"
               }}
               title="resume"
             />
-            <button
-              onClick={() => setResumeUrl(null)}
+
+            <div
               style={{
                 padding: "12px 20px",
-                background: "#dc3545",
-                color: "white",
-                border: "none",
+                background: "#f8f9fa",
+                borderTop: "1px solid #e9ecef",
                 borderRadius: "0 0 8px 8px",
-                cursor: "pointer",
-                fontSize: "16px",
-                fontWeight: "500"
+                display: "flex",
+                gap: "10px",
+                justifyContent: "flex-end"
               }}
             >
-              Close
-            </button>
+              <button
+                onClick={() => window.open(resumeUrl, "_blank")}
+                style={{
+                  padding: "8px 16px",
+                  background: "#007bff",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  fontWeight: "500"
+                }}
+              >
+                Open in New Tab
+              </button>
+              <button
+                onClick={closeResume}
+                style={{
+                  padding: "8px 16px",
+                  background: "#dc3545",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  fontWeight: "500"
+                }}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
