@@ -40,96 +40,84 @@ export const upload = multer({ storage });
 export const uploadResume = async (req, res) => {
     try {
         const userId = req.user?.id;
-        console.log("=== Upload Resume Started ===");
-        console.log("User ID:", userId);
- 
+
         if (!userId) {
             return res.status(401).json({
-                message: "Unauthorized - No user ID"
+                success: false,
+                message: "Unauthorized",
             });
         }
- 
+
         if (!req.file) {
-            console.log("No file received");
             return res.status(400).json({
-                message: "Please upload a file"
+                success: false,
+                message: "Please upload a file",
             });
         }
- 
-        console.log("File received:", req.file.originalname, req.file.size);
- 
+
         const user = await User.findById(userId);
- 
+
         if (!user) {
-            console.log("User not found in database");
             return res.status(404).json({
-                message: "User not found"
+                success: false,
+                message: "User not found",
             });
         }
- 
-        console.log("Starting Cloudinary upload...");
- 
+
         const result = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 {
                     folder: "resumes",
-                    resource_type: "auto",  // ✅ Auto-detect file type
+                    resource_type: "auto",
                     public_id: `resume_${userId}`,
                     overwrite: true,
-                    invalidate: true
+                    invalidate: true,
                 },
                 (error, result) => {
                     if (error) {
-                        console.error("❌ Cloudinary error:", error);
                         reject(error);
                     } else {
-                        console.log("✅ Cloudinary upload success");
-                        console.log("Secure URL:", result.secure_url);
                         resolve(result);
                     }
                 }
             );
- 
-            uploadStream.on('error', (err) => {
-                console.error("Upload stream error:", err);
-                reject(err);
-            });
- 
+
             uploadStream.end(req.file.buffer);
         });
- 
-        // ✅ Create URLs for display and download
-        const cloudinaryUrl = result.secure_url;  // Original Cloudinary URL
-        const viewableUrl = cloudinaryUrl + "?fl_inline";  // Add ?fl_inline for inline display
- 
-        console.log("Cloudinary URL:", cloudinaryUrl);
-        console.log("Viewable URL:", viewableUrl);
- 
-        // ✅ Store BOTH URLs in database
+
+        const cloudinaryUrl = result.secure_url;
+
+        const downloadUrl = cloudinary.url(result.public_id, {
+            resource_type: result.resource_type,
+            flags: "attachment",
+            secure: true,
+        });
+
         user.resume = {
-            url: viewableUrl,  // For viewing (with ?fl_inline)
-            cloudinaryUrl: cloudinaryUrl,  // For downloading (original)
+            url: cloudinaryUrl,
+            downloadUrl,
             public_id: result.public_id,
             originalName: req.file.originalname,
-            uploadedAt: new Date()
+            uploadedAt: new Date(),
         };
- 
+
         await user.save();
-        console.log("✅ Resume saved to database");
- 
-        const updatedUser = await User.findById(userId);
- 
+        console.log(result);
+        console.log(result.resource_type);
+        console.log(result.type);
+        console.log(result.secure_url);
+
         return res.status(200).json({
             success: true,
             message: "Resume uploaded successfully",
-            resume: updatedUser.resume  // ✅ Return both URLs
+            resume: user.resume,
         });
- 
     } catch (error) {
-        console.error("❌ Resume upload error:", error);
+        console.error("Resume upload error:", error);
+
         return res.status(500).json({
             success: false,
-            message: error.message || "Failed to upload resume"
+            message: error.message || "Failed to upload resume",
         });
     }
 };
