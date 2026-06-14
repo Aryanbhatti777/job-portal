@@ -41,7 +41,6 @@ export const uploadResume = async (req, res) => {
     try {
         const userId = req.user?.id;
 
-
         if (!userId) {
             return res.status(401).json({
                 message: "Unauthorized"
@@ -56,7 +55,6 @@ export const uploadResume = async (req, res) => {
 
         const user = await User.findById(userId);
 
-
         if (!user) {
             return res.status(404).json({
                 message: "User not found"
@@ -69,7 +67,7 @@ export const uploadResume = async (req, res) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 {
                     folder: "resumes",
-                    resource_type: "raw",
+                    resource_type: "auto",  // ✅ Changed from "raw" to "auto"
                     public_id: `resume_${userId}`,
                     overwrite: true,
                     invalidate: true
@@ -83,10 +81,12 @@ export const uploadResume = async (req, res) => {
             uploadStream.end(req.file.buffer);
         });
 
-        
+        // ✅ Add ?fl_inline parameter to force inline viewing
+        // ✅ Replace the viewableUrl line with this:
+        const viewableUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(result.secure_url)}&embedded=true`;
 
         user.resume = {
-            url: result.secure_url,
+            url: viewableUrl,
             public_id: result.public_id,
             originalName: req.file.originalname,
             uploadedAt: new Date()
@@ -94,9 +94,7 @@ export const uploadResume = async (req, res) => {
 
         await user.save();
 
-
         const updatedUser = await User.findById(userId);
-
 
         return res.status(200).json({
             success: true,
@@ -105,7 +103,6 @@ export const uploadResume = async (req, res) => {
         });
 
     } catch (error) {
-
         return res.status(500).json({
             success: false,
             message: error.message
