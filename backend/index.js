@@ -4,6 +4,8 @@ dotenv.config();
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import { connectToDb } from "./config/db.js";
 import { connectCloudinary } from "./config/cloudinary.js";
@@ -13,6 +15,10 @@ import { jobRouter } from "./routes/jobRoutes.js";
 import { ApplicationRouter } from "./routes/applicationRoutes.js";
 import { profileRouter } from "./routes/profileRoutes.js";
 import { adminRouter } from "./routes/adminRoutes.js";
+
+// ✅ Fix for __dirname in ES6 modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -39,12 +45,32 @@ app.use(
   })
 );
 
+// ✅ Serve static files from React build
+app.use(express.static(path.join(__dirname, "dist")));
+// If using 'build' folder instead of 'dist', change above to:
+// app.use(express.static(path.join(__dirname, "build")));
+
 // ---------------- ROUTES ----------------
 app.use("/api/auth", authRouter);
 app.use("/api/jobs", jobRouter);
 app.use("/api/application", ApplicationRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/admin", adminRouter);
+
+// ✅ CRITICAL: Fallback route for React SPA
+// This must come AFTER all API routes
+// Use regex /.*/ instead of "*" for newer Express versions
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  // If using 'build' folder instead of 'dist', change above to:
+  // res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+// ✅ Error handling (optional but recommended)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Internal Server Error" });
+});
 
 // ---------------- START SERVER SAFELY ----------------
 const startServer = async () => {
