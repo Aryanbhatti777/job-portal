@@ -117,28 +117,36 @@ const Applicants = () => {
 
       {/* RESUME MODAL */}
       {resumeUrl && (
-        <div
-          className={styles.modalBackdrop}
-          onClick={() => setResumeUrl(null)}
-        >
-          <div
-            className={styles.modal}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <iframe
-              src={resumeUrl}
-              className={styles.iframe}
-              title="resume"
-            />
-            <button
-              className={styles.closeBtn}
-              onClick={() => setResumeUrl(null)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+  <div
+    className={styles.modalBackdrop}
+    onClick={() => setResumeUrl(null)}
+  >
+    <div
+      className={styles.modal}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Option 1: Embed PDF viewer (better for PDFs) */}
+      <embed
+        src={resumeUrl}
+        type="application/pdf"
+        width="100%"
+        height="100%"
+      />
+      
+      {/* OR Option 2: Open in new tab (fallback) */}
+      {/* <a href={resumeUrl} target="_blank" rel="noreferrer">
+        Open Resume in New Tab
+      </a> */}
+      
+      <button
+        className={styles.closeBtn}
+        onClick={() => setResumeUrl(null)}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 };
