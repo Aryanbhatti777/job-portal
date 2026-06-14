@@ -9,6 +9,7 @@ const Profile = () => {
   const [applications, setApplications] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
+  const [resumeUrl, setResumeUrl] = useState(null); // ✅ Added for modal
 
   useEffect(() => {
     if (!user) return;
@@ -89,13 +90,20 @@ const Profile = () => {
                   <strong>Resume</strong>
                   <p className={styles.resumeRow}>
                     <span>{user.resume.originalName || "Uploaded resume"}</span>
-                    <a
-                      href={user.resume.url}
-                      target="_blank"
-                      rel="noreferrer"
+                    {/* ✅ Changed: Use button instead of anchor tag */}
+                    <button
+                      onClick={() => setResumeUrl(user.resume.url)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#007bff",
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                        padding: 0
+                      }}
                     >
                       View
-                    </a>
+                    </button>
                   </p>
                 </div>
 
@@ -166,6 +174,63 @@ const Profile = () => {
           )}
         </div>
       </div>
+
+      {/* ✅ RESUME MODAL */}
+      {resumeUrl && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.7)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000
+          }}
+          onClick={() => setResumeUrl(null)}
+        >
+          <div
+            style={{
+              background: "white",
+              width: "90%",
+              height: "90%",
+              borderRadius: "8px",
+              display: "flex",
+              flexDirection: "column",
+              position: "relative"
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <iframe
+              src={resumeUrl}
+              style={{
+                flex: 1,
+                border: "none",
+                borderRadius: "8px 8px 0 0"
+              }}
+              title="resume"
+            />
+            <button
+              onClick={() => setResumeUrl(null)}
+              style={{
+                padding: "12px 20px",
+                background: "#dc3545",
+                color: "white",
+                border: "none",
+                borderRadius: "0 0 8px 8px",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: "500"
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
