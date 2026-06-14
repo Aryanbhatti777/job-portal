@@ -124,21 +124,7 @@ const Profile = () => {
                         {loadingResume ? "Loading..." : "View"}
                       </button>
 
-                      {/* ✅ Download button - direct download */}
-                      <a
-                        href={user.resume.downloadUrl || user.resume.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: "#28a745",
-                          textDecoration: "underline",
-                          cursor: "pointer",
-                          fontSize: "14px",
-                          fontWeight: "500"
-                        }}
-                      >
-                        Download
-                      </a>
+                     
                     </div>
                   </p>
                 </div>
