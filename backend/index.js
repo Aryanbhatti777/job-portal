@@ -29,7 +29,7 @@ app.use(cookieParser());
 // CORS (production-safe)
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL || "https://job-portal-seven-black.vercel.app"
+  process.env.FRONTEND_URL || "https://job-portal-omega-sable.vercel.app"
 ];
 app.use(
   cors({
